@@ -6,38 +6,205 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MTG Simulator</title>
 
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/socket.io-client@3.1.3/dist/socket.io.min.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <div id="arena">
+    <!-- <div id="arena">
         <div id="playerTop"></div>
         <div id="center"></div>
         <div id="playerBottom"></div>
+    </div> -->
+
+    <div id="fullPannel" class="col-xl-12">
+        <div id="floatLeft" class="col-xl-2">
+            <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 100%;">
+                <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                  <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                  <span class="fs-4">Sidebar</span>
+                </a>
+                <hr>
+                <ul class="nav nav-pills flex-column mb-auto">
+                  <li class="nav-item">
+                    <a href="#" class="nav-link active" aria-current="page">
+                      <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
+                      Home
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="nav-link text-white">
+                      <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+                      Dashboard
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="nav-link text-white">
+                      <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
+                      Orders
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="nav-link text-white">
+                      <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>
+                      Products
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="nav-link text-white">
+                      <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
+                      Customers
+                    </a>
+                  </li>
+                </ul>
+                <hr>
+                <div class="dropdown">
+                  <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                    <strong>mdo</strong>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+                    <li><a class="dropdown-item" href="#">New project...</a></li>
+                    <li><a class="dropdown-item" href="#">Settings</a></li>
+                    <li><a class="dropdown-item" href="#">Profile</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#">Sign out</a></li>
+                  </ul>
+                </div>
+              </div>
+        </div>
+        <div id="containerCenter" class="col-xl-8"">
+            <div id="containerTop" class="playerCards">
+                <div class="mtgCardBox"><img class="mtgCard" src="https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg" alt="" srcset=""></div>
+                <div class="mtgCardBox"><img class="mtgCard" src="https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg" alt="" srcset=""></div>
+                <div class="mtgCardBox"><img class="mtgCard" src="https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg" alt="" srcset=""></div>
+                <div class="mtgCardBox"><img class="mtgCard" src="https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg" alt="" srcset=""></div>
+                <div class="mtgCardBox"><img class="mtgCard" src="https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg" alt="" srcset=""></div>
+                <div class="mtgCardBox"><img class="mtgCard" src="https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg" alt="" srcset=""></div>
+                <div class="mtgCardBox"><img class="mtgCard" src="https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg" alt="" srcset=""></div>
+            </div>
+            <div id="fullArena" ></div>
+            <div id="containerBottom" class="playerCards">
+                <div class="mtgCardBox"><img class="mtgCard" src="https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg" alt="" srcset=""></div>
+                <div class="mtgCardBox"><img class="mtgCard" src="https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg" alt="" srcset=""></div>
+                <div class="mtgCardBox"><img class="mtgCard" src="https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg" alt="" srcset=""></div>
+                <div class="mtgCardBox"><img class="mtgCard" src="https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg" alt="" srcset=""></div>
+                <div class="mtgCardBox"><img class="mtgCard" src="https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg" alt="" srcset=""></div>
+                <div class="mtgCardBox"><img class="mtgCard" src="https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg" alt="" srcset=""></div>
+                <div class="mtgCardBox"><img class="mtgCard" src="https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg" alt="" srcset=""></div>
+            </div>
+        </div>
+        <div id="floatRight" class="col-xl-2">
+            <div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 100%;">
+                <a href="/" class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
+                  <svg class="bi me-2" width="30" height="24"><use xlink:href="#bootstrap"></use></svg>
+                  <span class="fs-5 fw-semibold">List group</span>
+                </a>
+                <div class="list-group list-group-flush border-bottom scrollarea">
+                  <a href="#" class="list-group-item list-group-item-action active py-3 lh-tight" aria-current="true">
+                    <div class="d-flex w-100 align-items-center justify-content-between">
+                      <strong class="mb-1">List group item heading</strong>
+                      <small>Wed</small>
+                    </div>
+                    <div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
+                  </a>
+                  <a href="#" class="list-group-item list-group-item-action py-3 lh-tight">
+                    <div class="d-flex w-100 align-items-center justify-content-between">
+                      <strong class="mb-1">List group item heading</strong>
+                      <small class="text-muted">Tues</small>
+                    </div>
+                    <div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
+                  </a>
+                  <a href="#" class="list-group-item list-group-item-action py-3 lh-tight">
+                    <div class="d-flex w-100 align-items-center justify-content-between">
+                      <strong class="mb-1">List group item heading</strong>
+                      <small class="text-muted">Mon</small>
+                    </div>
+                    <div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
+                  </a>
+            
+                  <a href="#" class="list-group-item list-group-item-action py-3 lh-tight" aria-current="true">
+                    <div class="d-flex w-100 align-items-center justify-content-between">
+                      <strong class="mb-1">List group item heading</strong>
+                      <small class="text-muted">Wed</small>
+                    </div>
+                    <div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
+                  </a>
+                  <a href="#" class="list-group-item list-group-item-action py-3 lh-tight">
+                    <div class="d-flex w-100 align-items-center justify-content-between">
+                      <strong class="mb-1">List group item heading</strong>
+                      <small class="text-muted">Tues</small>
+                    </div>
+                    <div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
+                  </a>
+                  <a href="#" class="list-group-item list-group-item-action py-3 lh-tight">
+                    <div class="d-flex w-100 align-items-center justify-content-between">
+                      <strong class="mb-1">List group item heading</strong>
+                      <small class="text-muted">Mon</small>
+                    </div>
+                    <div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
+                  </a>
+                  <a href="#" class="list-group-item list-group-item-action py-3 lh-tight" aria-current="true">
+                    <div class="d-flex w-100 align-items-center justify-content-between">
+                      <strong class="mb-1">List group item heading</strong>
+                      <small class="text-muted">Wed</small>
+                    </div>
+                    <div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
+                  </a>
+                  <a href="#" class="list-group-item list-group-item-action py-3 lh-tight">
+                    <div class="d-flex w-100 align-items-center justify-content-between">
+                      <strong class="mb-1">List group item heading</strong>
+                      <small class="text-muted">Tues</small>
+                    </div>
+                    <div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
+                  </a>
+                  <a href="#" class="list-group-item list-group-item-action py-3 lh-tight">
+                    <div class="d-flex w-100 align-items-center justify-content-between">
+                      <strong class="mb-1">List group item heading</strong>
+                      <small class="text-muted">Mon</small>
+                    </div>
+                    <div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
+                  </a>
+                  <a href="#" class="list-group-item list-group-item-action py-3 lh-tight" aria-current="true">
+                    <div class="d-flex w-100 align-items-center justify-content-between">
+                      <strong class="mb-1">List group item heading</strong>
+                      <small class="text-muted">Wed</small>
+                    </div>
+                    <div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
+                  </a>
+                  <a href="#" class="list-group-item list-group-item-action py-3 lh-tight">
+                    <div class="d-flex w-100 align-items-center justify-content-between">
+                      <strong class="mb-1">List group item heading</strong>
+                      <small class="text-muted">Tues</small>
+                    </div>
+                    <div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
+                  </a>
+
+                </div>
+              </div>
+        </div>
     </div>
-    <!-- <form id="chat">
-        <input type="text" name="username" placeholder="digite o usuário">
-        <div class="messages"></div>
-        <input type="text" name="message" placeholder="digite sua mensagem">
-        <button type="submit">Enviar</button>
-    </form> -->
 
-    
-
-    <!-- Sockets -->
     <script type="text/javascript">
+        var AllCards = {};
         var SelectedObject = {};
 
         var socket = io('http://localhost:3000');
+
 
         function renderMessage(message){
             $('.messages').append('<div class="message"><strong> ' + message.author + ' </strong>' + message.message + '</div>')
         }
 
         function renderCard(card){
-
             $('#arena').append(
                 '<div style="top: ' + card.x + '; left: ' + card.y + ';" class="card" id="' + card.id + '" onclick="controls(\'' + card.id + '\', event)";>' + 
                     '<div class="cardHeader" id="' + card.id + 'header">' + 
@@ -56,6 +223,7 @@
             for(card of cards){
                 renderCard(card);
             }
+            AllCards = cards;
         })
 
         socket.on('updatedCardPosition', function(card){
@@ -99,7 +267,6 @@
         });
 
         function controls(selected){
-            console.log("selected ► ",selected )
             if (event.button == 0 && event.shiftKey){
                 revealCard(selected);
             } else if (event.button == 0 && event.ctrlKey){
@@ -111,14 +278,26 @@
 
         function revealCard(cardId){
             socket.emit('revealCard', cardId);
+            setVisibleCard(cardId);
         }
 
         function turnCard(card){
             console.log("Clicked in Turn Card")
         }
 
-        function setVisibleCard(selected){
-            console.log("selected do set visible", selected);
+        function setVisibleCard(cardId){
+            var card = refreshCardReveal(cardId)
+            console.log("card to Reveal = ", card);
+            destructCard(card);
+            renderCard(card);
+        }
+
+        function refreshCardReveal(cardId){
+            var updatedCard = AllCards.filter(function (item) {
+                return item.id == cardId;
+            });
+            updatedCard[0].reveal = !updatedCard[0].reveal;
+            return updatedCard[0];
         }
 
         function dragable(selected){
@@ -128,7 +307,6 @@
         function dragElement(selectedObject) {
 
             SelectedObject = selectedObject;
-            console.log("entrou no dragElement", selectedObject);
             var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
             if (document.getElementById(selectedObject.id + "header")) {
                 document.getElementById(selectedObject.id + "header").onmousedown = dragMouseDown;
@@ -146,7 +324,6 @@
             }
         
             function elementDrag(e) {
-                // console.log("entrou no element drag", e);
                 e = e || window.event;
                 e.preventDefault();
                 pos1 = pos3 - e.clientX;
@@ -156,12 +333,11 @@
                 selectedObject.style.top = SelectedObject.x = (selectedObject.offsetTop - pos2) + "px";
                 selectedObject.style.left = SelectedObject.y = (selectedObject.offsetLeft - pos1) + "px";
                 SelectedObject.id = selectedObject.id;
-                console.log("X = ", SelectedObject.x);
-                console.log("Y = ", SelectedObject.y);
                 updateCardPosition();
             }
 
             function updateCardPosition(){
+                console.log(SelectedObject);
                 socket.emit('dragCard',  data = { id: SelectedObject.id, x: SelectedObject.x, y: SelectedObject.y});
             };
             

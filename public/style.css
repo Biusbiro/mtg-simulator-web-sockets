@@ -1,7 +1,64 @@
 /* html, body {
     height: 100%;
   } */
-  
+
+  #fullPannel {
+    display: flex;
+    background-color: rgb(111, 111, 255);
+    padding: 5px;
+    height: 100vh;
+  }
+
+  #floatLeft{
+    display: flex;
+    background-color: rgb(148, 148, 148);
+    padding: 5px;
+  }
+
+  #containerCenter{
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(71, 71, 71);
+    padding: 10px;
+  }
+
+  #containerTop{
+    flex: 2;
+  }
+
+  #fullArena{
+    display: flex;
+    background-color: rgb(189 189 189);
+    padding: 5px;
+    flex: 8;
+  }
+
+  #containerBottom{
+    flex: 2;
+  }
+
+  .playerCards{
+    text-align: center;
+    display: flex;
+    background-color: rgb(224 224 224);
+    padding: 5px;
+  }
+
+  #floatRight{
+    display: flex;
+    background-color: rgb(148, 148, 148);
+    padding: 5px;
+  }
+
+  .mtgCardBox{
+    position: unset;
+  }
+
+  .mtgCard{
+    max-height: 120pt;
+    padding: 3px;
+  }
+
   * {
     margin: 0;
     padding: 0;
