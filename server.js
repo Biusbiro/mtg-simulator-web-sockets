@@ -15,6 +15,9 @@ app.use('/', (req, res) => {
     res.render('index.html') ;
 });
 
+const Player1Name = "Bismarck";
+const Player2Name = "Renata";
+
 var imgCardsPlayer1 = getCardsPlayer1();
 var imgCardsPlayer2 = getCardsPlayer2();
 
@@ -66,6 +69,18 @@ io.on('connection', socket => {
         socket.emit('updateGame', game);
     });
 
+    socket.on('setColor', data => {
+        setColor(data);
+        socket.broadcast.emit('updateGame', game);
+        socket.emit('updateGame', game);
+    }) 
+
+    socket.on('returnToDeck', data => {
+        returnToDeck(data);
+        socket.broadcast.emit('updateGame', game);
+        socket.emit('updateGame', game);
+    });
+
     socket.on('addPlayer', data => {
         addPlayer(data);
         socket.broadcast.emit('updateGame', game);
@@ -105,6 +120,34 @@ function draw(player){
         cardId: cardDrawed.id,
         container: container
     });
+
+    addLog((player == "Player1" ? Player1Name : Player2Name) + " Comprou uma carta do Deck");
+}
+
+function setColor(data){
+    var card = game.cards.filter(function(item) { return item.id == data.cardId })[0];
+    card.color = data.color;
+}
+
+function addLog(textLog){
+    var log = {
+        text: textLog,
+        time: getTime()
+    }
+
+    game.logs.unshift(log);
+}
+
+function getTime(){
+    var date = new Date;
+    var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+    var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+    var hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+    return hour + ":" + minutes + ":" + seconds;
+}
+
+function returnToDeck(card){
+
 }
 
 function getCards(cards, cardContainer, cardOwner){
@@ -116,10 +159,13 @@ function getCards(cards, cardContainer, cardOwner){
             uri: element,
             turned: false,
             reveal: false,
-            container: cardContainer
+            container: cardContainer,
+            color: "none",
+            attachs: []
         }
         listCards.push(card);
     });
+    console.log(listCards);
     return listCards;
 }
 

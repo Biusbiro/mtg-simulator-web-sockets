@@ -179,3 +179,29 @@
   .turned{
     transform: rotate(90deg);
   }
+
+  .colorButton{
+    padding: 5px;
+    margin: 3px;
+    border-radius: 4px;
+  }
+
+  #colors{
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+  }
+
+  .colorblue{ background-color: blue;}
+  .colorblueviolet{ background-color: blueviolet;}
+  .colorcrimson{ background-color: crimson;}
+  .colordarkgreen{ background-color: darkgreen;}
+  .colordeeppink{ background-color: deeppink;}
+  .colorhotpink{ background-color: hotpink;}
+  .colorred{ background-color: red;}
+  .coloryellow{ background-color: yellow;}
+  .colororangered{ background-color: orangered;}
+  .colorspringgreen{ background-color: springgreen;}
+  .colormidnightblue{ background-color: rgb(23, 23, 37);}
+  .colorolivedrab{ background-color: olivedrab;}
+  
