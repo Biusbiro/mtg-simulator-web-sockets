@@ -6,20 +6,6 @@ const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 const shortid = require('shortid');
 
-const EContainers = Object.freeze({
-    "player1Land" : 1,
-    "player2Land" : 2,
-    "player1NonLand" : 3,
-    "player2NonLand" : 4,
-    "player1Grave" : 5,
-    "player2Grave" : 6,
-    "player1Exilium" : 7,
-    "player2Exilium" : 8,
-    "player1Deck" : 9,
-    "player2Deck" : 10
-})
-
-
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', path.join(__dirname, 'public'));
 app.engine('html', require('ejs').renderFile);
@@ -32,8 +18,8 @@ app.use('/', (req, res) => {
 var imgCardsPlayer1 = getCardsPlayer1();
 var imgCardsPlayer2 = getCardsPlayer2();
 
-var deckPlayer1 = getCards(imgCardsPlayer1, EContainers.player1Deck, 'Player1');
-var deckPlayer2 = getCards(imgCardsPlayer2, EContainers.player2Deck, 'player2');
+var deckPlayer1 = getCards(imgCardsPlayer1, "player1Deck", 'Player1');
+var deckPlayer2 = getCards(imgCardsPlayer2, "player2Deck", 'Player2');
 
 var lifePlayer1 = 20;
 var lifePlayer2 = 20;
@@ -58,25 +44,34 @@ io.on('connection', socket => {
     console.log(`Socket conectado: ${socket.id}`);
 
     socket.on('reveal', data => {
-        reveal(cardId);
+        reveal(data);
         socket.broadcast.emit('updateGame', game);
+        socket.emit('updateGame', game);
     });
 
     socket.on('turn', data => {
-        turn(cardId);
+        turn(data);
         socket.broadcast.emit('updateGame', game);
+        socket.emit('updateGame', game);
     });
 
     socket.on('move', data => {
-        move(cardId);
+        move(data);
         socket.broadcast.emit('updateGame', game);
     });
 
     socket.on('draw', data => {
-        view(cardId);
+        draw(data);
+        socket.broadcast.emit('updateGame', game);
+        socket.emit('updateGame', game);
+    });
+
+    socket.on('addPlayer', data => {
+        addPlayer(data);
         socket.broadcast.emit('updateGame', game);
     });
     
+    socket.emit('setPlayer', "Player" + (game.players.length + 1));
     socket.emit('updateGame', game);
 });
 
@@ -85,31 +80,34 @@ server.listen(3000);
 console.log("started server!");
 
 function reveal(cardId){
-    console.log(cardId);
+    var card = game.cards.filter(function(item) { return item.id == cardId })[0];
+    card.reveal = !card.reveal;
 }
 
 function turn(cardId){
-    console.log(cardId);
+    var card = game.cards.filter(function(item) { return item.id == cardId })[0];
+    card.turned = !card.turned;
 }
 
-function move(cardId){
-    console.log(cardId);
+function move(data){
+    var card = game.cards.filter(function(item) { return item.id == data.cardId })[0];
+    card.container = data.container;
 }
 
-function draw(cardId){
-    console.log(cardId);
-}
+function draw(player){
+    var playerCards = game.cards.filter(function(item) { return item.owner == player });
+    var cardDrawed = playerCards[Math.floor(Math.random()*playerCards.length)];
+    var container = player == "Player1"
+        ? "player1Hand"
+        : "player2Hand";
 
-function addConnection(id){
-    var maxUsers = 2;
-    const sessionID = socket.id;
-    if (game.players.length < maxUsers){
-        addPlayer(sessionID);
-    }
+    move({
+        cardId: cardDrawed.id,
+        container: container
+    });
 }
 
 function getCards(cards, cardContainer, cardOwner){
-    cards.sort();
     listCards = [];
     cards.forEach(element => {
         var card = {
@@ -118,7 +116,6 @@ function getCards(cards, cardContainer, cardOwner){
             uri: element,
             turned: false,
             reveal: false,
-            inHand: false,
             container: cardContainer
         }
         listCards.push(card);
@@ -126,14 +123,13 @@ function getCards(cards, cardContainer, cardOwner){
     return listCards;
 }
 
-function addPlayer(socketId){
-    player = { 
-        socketId: socketId,
-        life: lifePlayer1,
-        charge: chargePlayer1,
-        poison: poisonPlayer1,
-    }
-    game.players.push(player);
+function addPlayer(player){
+    game.players.push({
+        name: player,
+        life: 20,
+        poison: 0,
+        charge: 0
+    });
 }
 
 function getCardsPlayer1(){

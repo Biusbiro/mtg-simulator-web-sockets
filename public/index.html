@@ -68,6 +68,7 @@
                     </a>
                   </li>
                 </ul>
+                <div id="playerName"></div>
                 <div style="
                   display: flex;
                   flex-direction: column;
@@ -93,7 +94,7 @@
                   <div style="display: flex;">
                     <div class="pile">
                       <div class="titlePile">Grimório</div>
-                      <img src="https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg" alt="" width="180pt">
+                      <img id="draw" draggable="true" ondragstart="drag(event)" src="https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg" alt="" width="180pt">
                     </div>
                   </div>
                 </div>
@@ -239,187 +240,151 @@
 
     <script type="text/javascript">
 
+        var server = (location.hostname === "localhost" || location.hostname === "127.0.0.1")
+          ? "localhost"
+          : "192.168.0.110";
+
+        var socket = io('http://' + server + ':3000');
+        
+
+        const EContainers = Object.freeze({
+          "player1Land" : 1,
+          "player2Land" : 2,
+          "player1NonLand" : 3,
+          "player2NonLand" : 4,
+          "player1Grave" : 5,
+          "player2Grave" : 6,
+          "player1Exilium" : 7,
+          "player2Exilium" : 8,
+          "player1Deck" : 9,
+          "player2Deck" : 10,
+          "player1Command": 11,
+          "player2Command": 12,
+          "player1Hand": 13,
+          "player2Hand": 14,
+        })
+
+
         var AllCards = {};
         var SelectedObject = {};
-        var player = "Player1";
+        var player = "";
         var defaultCard = "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg";
-
-        var socket = io('http://localhost:3000');
-
-		    function getContainer(card){
-          return "containerBottom";
-        }
 
         socket.on('updateGame', function(game){
           updateGame(game);
         })
 
+        socket.on('setPlayer', function(playerName){
+          addPlayer(playerName);
+        })
+
+        function addPlayer(playerName){
+          player = playerName;
+          $("#playerName").html('');
+          $("#playerName").append(player);
+          socket.emit('addPlayer', player);
+        }
+
         function updateGame(game){
-          console.log("game = ", game);
+          
+          if (player != "Player1" && player != "Player2"){
+            return;
+          }
+
+          clear();
 
           for(var card of game.cards){
-            console.log(card)
             renderCard(card);
           }
         }
 
+        function clear(){
+          $("#containerTop").html('');
+          $("#arenaOpponentLands").html('');
+          $("#arenaOpponentCards").html('');
+          $("#arenaPlayerCards").html('');
+          $("#arenaPlayerLands").html('');
+          $("#containerBottom").html('');
+        }
+
         function renderCard(card){
 
-          // for test
-          card.inHand = true;
+          // Força exibição de cards que estão em jogo (necessário melhoria para utilizar "Profetizar")
+          if (card.container != "player1Hand" && card.container != "player2Hand"){
+            card.reveal = true;
+          }
 
-          console.log("entrou no render", card)
+          // não denderiza cartas dos decks
+          if (card.container == "player1Deck" || card.container == "player2Deck"){
+            return;
+          }
+
           var container = getContainer(card);
+          
+          var turned = card.turned ? "turned" : "";
           var id = card.id;
-          var img = (card.reveal || (card.inHand && card.owner == player))
+          var img = (card.reveal ||  card.owner == player)
             ? card.uri
             : defaultCard;
-
-          var currentValue = $(container).html;
+          
+          console.log("Container ► ", container)
 
           $(container).append(`
-            <div class="mtgCardBox">
+            <div class="mtgCardBox ` + turned + `">
               <img 
                 id="` + id + `" 
                 draggable="true" 
                 ondragstart="drag(event)" 
+                onClick="clickCard(event)"
                 class="mtgCard" 
                 src="` + img + `" 
-                srcset=""
                 >
               </div>
           `);
         }
 		
-		function getContainer(card){
-          return "#containerBottom";
+		    function getContainer(card){
+          if(player == "Player1"){
+            if(card.container == "player1Land") {return "#arenaPlayerLands"};
+            if(card.container == "player2Land") {return "#arenaOpponentLands"};
+            if(card.container == "player1NonLand") {return "#arenaPlayerCards"};
+            if(card.container == "player2NonLand") {return "#arenaOpponentCards"};
+            if(card.container == "player1Hand") {return "#containerBottom"};
+            if(card.container == "player2Hand") {return "#containerTop"};
+          }
+          if(player == "Player2"){
+            if(card.container == "player1Land") {return "#arenaOpponentLands"};
+            if(card.container == "player2Land") {return "#arenaPlayerLands"};
+            if(card.container == "player1NonLand") {return "#arenaOpponentCards"};
+            if(card.container == "player2NonLand") {return "#arenaPlayerCards"};
+            if(card.container == "player1Hand") {return "#containerTop"};
+            if(card.container == "player2Hand") {return "#containerBottom"};
+          }
         }
 
-        function renderCounters(players){
-          player1 = players.map(obj => obj.socketId)
+        function getContainerReverse(container){
+          if(player == "Player1"){
+            if(container == "arenaPlayerLands") {return "player1Land"};
+            if(container == "arenaOpponentLands") {return "player2Land"};
+            if(container == "arenaPlayerCards") {return "player1NonLand"};
+            if(container == "arenaOpponentCards") {return "player2NonLand"};
+            if(container == "containerBottom") {return "player1Hand"};
+            if(container == "containerTop") {return "player2Hand"};
+          }
+          if(player == "Player2"){
+            if(container == "arenaOpponentLands") {return "player1Land"};
+            if(container == "arenaPlayerLands") {return "player2Land"};
+            if(container == "arenaOpponentCards") {return "player1NonLand"};
+            if(container == "arenaPlayerCards") {return "player2NonLand"};
+            if(container == "containerTop") {return "player1Hand"};
+            if(container == "containerBottom") {return "player2Hand"};
+          }
         }
-
-        // socket.on('updatedCardPosition', function(card){
-        //     destructCard(card);
-        //     renderCard(card);
-        // })
-
-        // socket.on('updatedCardReveal', function(card){
-        //     console.log("card revelado:", card);
-        //     destructCard(card);
-        //     renderCard(card);
-        // })
-
-        // socket.on('previousMessages', function(messages){
-        //     for(message of messages){
-        //         renderMessage(message);
-        //     }
-        // })
-
-        // socket.on('receivedMessage', function(message){
-        //     renderMessage(message);
-        // })
-
-        // $('#chat').submit(function(event){
-        //     event.preventDefault();
-
-        //     var author = $('input[name=username]').val();
-        //     var message = $('input[name=message]').val();
-            
-
-        //     if (author.length && message.length){
-        //         var messageObject = {
-        //             author: author,
-        //             message: message,
-        //         };
-
-        //         renderMessage(messageObject);
-
-        //         socket.emit('sendMessage', messageObject);
-        //     }
-        // });
-
-        // function controls(selected){
-        //     if (event.button == 0 && event.shiftKey){
-        //         revealCard(selected);
-        //     } else if (event.button == 0 && event.ctrlKey){
-        //         turnCard(selected);
-        //     } else {
-        //         dragable(selected);
-        //     }
-        // }
-
-        // function revealCard(cardId){
-        //     socket.emit('revealCard', cardId);
-        //     setVisibleCard(cardId);
-        // }
-
-        // function turnCard(card){
-        //     console.log("Clicked in Turn Card")
-        // }
-
-        // function setVisibleCard(cardId){
-        //     var card = refreshCardReveal(cardId)
-        //     console.log("card to Reveal = ", card);
-        //     destructCard(card);
-        //     renderCard(card);
-        // }
-
-        // function refreshCardReveal(cardId){
-        //     var updatedCard = AllCards.filter(function (item) {
-        //         return item.id == cardId;
-        //     });
-        //     updatedCard[0].reveal = !updatedCard[0].reveal;
-        //     return updatedCard[0];
-        // }
 
         function dragable(selected){
             dragElement(document.getElementById(selected));
         }
         
-        function dragElement(selectedObject) {
-
-            SelectedObject = selectedObject;
-            var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-            if (document.getElementById(selectedObject.id + "header")) {
-                document.getElementById(selectedObject.id + "header").onmousedown = dragMouseDown;
-            } else {
-                selectedObject.onmousedown = dragMouseDown;
-            }
-        
-            function dragMouseDown(e) {
-                e = e || window.event;
-                e.preventDefault();
-                pos3 = e.clientX;
-                pos4 = e.clientY;
-                document.onmouseup = closeDragElement;
-                document.onmousemove = elementDrag;
-            }
-        
-            function elementDrag(e) {
-                e = e || window.event;
-                e.preventDefault();
-                pos1 = pos3 - e.clientX;
-                pos2 = pos4 - e.clientY;
-                pos3 = e.clientX;
-                pos4 = e.clientY;
-                selectedObject.style.top = SelectedObject.x = (selectedObject.offsetTop - pos2) + "px";
-                selectedObject.style.left = SelectedObject.y = (selectedObject.offsetLeft - pos1) + "px";
-                SelectedObject.id = selectedObject.id;
-                updateCardPosition();
-            }
-
-            function updateCardPosition(){
-                console.log(SelectedObject);
-                socket.emit('dragCard',  data = { id: SelectedObject.id, x: SelectedObject.x, y: SelectedObject.y});
-            };
-            
-            function closeDragElement() {
-                document.onmouseup = null;
-                document.onmousemove = null;
-            }
-        }
-
         function allowDrop(ev) {
           ev.preventDefault();
         }
@@ -431,8 +396,56 @@
         function drop(ev) {
           ev.preventDefault();
           var data = ev.dataTransfer.getData("text");
+          if (data == "draw"){
+            socket.emit('draw', player);
+            return;
+          }
+          moveCard(data, ev.toElement.id);
           ev.target.appendChild(document.getElementById(data));
         }
+
+        function moveCard(cardId, container){
+          socket.emit('move', {
+              cardId: cardId,
+              container: getContainerReverse(container)
+          });
+        }
+        
+        function clickCard(ev){
+          console.log("click");
+
+          // se control estiver pressionado
+          if (ev.ctrlKey){
+            turnCard(ev)
+            return;
+          } 
+
+          //se alt estiver pressionado
+          if (ev.altKey){
+            revealCard(ev)
+            return;
+          } 
+
+          viewCard(ev);
+        }
+
+        function revealCard(ev){
+          socket.emit('reveal', ev.target.id);
+        }
+
+        function turnCard(ev){
+          socket.emit('turn', ev.target.id);
+        }
+
+        function viewCard(ev){
+          var cardUri = ev.srcElement.currentSrc;
+          $("#amplifierCard").html('');
+          $("#amplifierCard").append(`
+            <img src="` + cardUri + `">
+          `)
+        }
+        
+
     </script>
 </body>
 </html>
