@@ -1,10 +1,19 @@
 const express = require('express');
 const path = require('path');
+var fs = require('fs');
+
+const axios = require('axios');
+const jsdom = require('jsdom');
+const {JSDOM} = jsdom;
+
+const scrape = require('website-scraper');
+const PuppeteerPlugin = require('website-scraper-puppeteer');
 
 const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 const shortid = require('shortid');
+const rimraf = require("rimraf");
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', path.join(__dirname, 'public'));
@@ -21,8 +30,8 @@ const Player2Name = "Renata";
 var imgCardsPlayer1 = getCardsPlayer1();
 var imgCardsPlayer2 = getCardsPlayer2();
 
-var deckPlayer1 = getCards(imgCardsPlayer1, "player1Deck", 'Player1');
-var deckPlayer2 = getCards(imgCardsPlayer2, "player2Deck", 'Player2');
+// var deckPlayer1 = getCards(imgCardsPlayer1, "player1Deck", 'Player1');
+// var deckPlayer2 = getCards(imgCardsPlayer2, "player2Deck", 'Player2');
 
 var lifePlayer1 = 20;
 var lifePlayer2 = 20;
@@ -33,15 +42,24 @@ var chargePlayer2 = 0;
 var poisonPlayer1 = 0;
 var poisonPlayer2 = 0;
 
-var allCards = deckPlayer1.concat(deckPlayer2);cards = allCards
+// var allCards = deckPlayer1.concat(deckPlayer2);cards = allCards
 
 var game = {
-    cards: allCards,
+    cards: [],
     players: [],
     logs: []
 };
 
 let messages = [];
+
+// rimraf.sync("./temp/"); // delete folder case exists
+getCardsFromLigaMagic('https://www.ligamagic.com.br/?view=dks/deck&id=2574892'); // create folder
+
+
+
+
+// var htmlFile = fs.readFile('./temp/index.html', 'utf-8');
+// console.log(htmlFile);
 
 io.on('connection', socket => {
     console.log(`Socket conectado: ${socket.id}`);
@@ -85,6 +103,17 @@ io.on('connection', socket => {
         addPlayer(data);
         socket.broadcast.emit('updateGame', game);
     });
+
+    socket.on('addCardsFromLigaMagic', data => {
+        var listCards = addCardsFromLigaMagic(data);
+        setTimeout(function () {
+            console.log("Waiting");
+        }, 8000);
+        console.log("na devolução:", listCards);
+
+        socket.broadcast.emit('updateGame', game);
+        socket.emit('updateGame', game);
+    })
     
     socket.emit('setPlayer', "Player" + (game.players.length + 1));
     socket.emit('updateGame', game);
@@ -93,6 +122,38 @@ io.on('connection', socket => {
 server.listen(3000);
 
 console.log("started server!");
+
+function getCardsFromLigaMagic(uri){
+    // $.ajax({
+    //     url: uri,
+    //     type: 'GET',
+    //     success: function(res) {
+    //         var headline = $(res.responseText).find('div.card-container-visual'); 
+    //         $("#cabecalho").html(headline);
+    //     }
+    // });  
+}
+
+async function addCardsFromLigaMagic(data){
+    var listCards = [];
+    const html = await axios.get(data.uri);
+    const dom = new JSDOM(html.data);
+    const cards = dom.window.document.querySelectorAll('.dk-link-mobile');
+
+    for (let i = 0; i < cards.length; i++) {
+        let item = cards[i].querySelector('img');
+        let src = item.getAttribute('src-off');
+        listCards.push(src);
+    }
+
+    var deck = data.player == "Player1" ? "player1Deck" : "player2Deck";
+    addCards = getCards(listCards, deck, data.player);
+    game.cards = game.cards.concat(addCards);
+
+    console.log("dentro do get", listCards);
+
+    return listCards;
+}
 
 function reveal(cardId){
     var card = game.cards.filter(function(item) { return item.id == cardId })[0];
@@ -165,7 +226,6 @@ function getCards(cards, cardContainer, cardOwner){
         }
         listCards.push(card);
     });
-    console.log(listCards);
     return listCards;
 }
 

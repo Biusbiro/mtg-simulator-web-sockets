@@ -5,17 +5,28 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MTG Simulator</title>
+    
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/socket.io-client@3.1.3/dist/socket.io.min.js"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js" integrity="sha512-2rNj2KJ+D8s1ceNasTIex6z4HWyOnEYLVC3FigGOmyQCZc2eBXKgOxQmo3oKLHyfcj53uz4QMsRCWNbLd32Q1g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+    
+    <!-- Socket IO -->
     <script src="https://cdn.socket.io/3.1.3/socket.io.min.js" integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh" crossorigin="anonymous"></script>
-
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+
+    <!-- JQuery -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
+
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/js/bootstrap.min.js" integrity="sha512-a6ctI6w1kg3J4dSjknHj3aWLEbjitAXAjLDRUxo2wyYmDFRcz2RJuQr5M3Kt8O/TtUSp8n2rAyaXYy1sjoKmrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"> -->
+
 
     <link rel="stylesheet" href="style.css">
 </head>
@@ -42,31 +53,34 @@
               
                 <hr>
                 <ul class="nav nav-pills flex-column mb-auto">
-                  <li class="nav-item">
-                    <a href="#" class="nav-link text-white">
-                      Adicionar Marcador
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" class="nav-link text-white">
-                      Adicionar Token
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" class="nav-link text-white">
-                      Orders
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" class="nav-link text-white">
-                      Products
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" class="nav-link text-white">
-                      Customers
-                    </a>
-                  </li>
+
+                  <button onclick="showModal('#addCardsLigaMagic')" type="button" class="btn btn-primary leftMenuButtons" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Usar deck da Liga Magic
+                  </button>
+
+                  <button type="button" class="btn btn-primary leftMenuButtons" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Launch demo modal
+                  </button>
+
+                  <button type="button" class="btn btn-primary leftMenuButtons" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Launch demo modal
+                  </button>
+
+                  <button type="button" class="btn btn-primary leftMenuButtons" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Launch demo modal
+                  </button>
+
+                  <button type="button" class="btn btn-primary leftMenuButtons" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Launch demo modal
+                  </button>
+
+                  <button type="button" class="btn btn-primary leftMenuButtons" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Launch demo modal
+                  </button>
+
+                  <button type="button" class="btn btn-primary leftMenuButtons" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Launch demo modal
+                  </button>
                 </ul>
                 <div id="playerName"></div>
                 <div style="
@@ -152,8 +166,6 @@
                 <div id="colors" class="list-group list-group-flush border-bottom scrollarea">
                   <div onclick="setColor('colorblue')" class="colorButton colorblue"></div>
                   <div onclick="setColor('colorblueviolet')" class="colorButton colorblueviolet"></div>
-                  <div onclick="setColor('colorcrimson')" class="colorButton colorcrimson"></div>
-                  <div onclick="setColor('colordarkgreen')" class="colorButton colordarkgreen"></div>
                   <div onclick="setColor('colordeeppink')" class="colorButton colordeeppink"></div>
                   <div onclick="setColor('colorhotpink')" class="colorButton colorhotpink"></div>
                   <div onclick="setColor('colorred')" class="colorButton colorred"></div>
@@ -162,6 +174,12 @@
                   <div onclick="setColor('colorspringgreen')" class="colorButton colorspringgreen"></div>
                   <div onclick="setColor('colormidnightblue')" class="colorButton colormidnightblue"></div>
                   <div onclick="setColor('colorolivedrab')" class="colorButton colorolivedrab"></div>
+                </div>
+                <div class="list-group list-group-flush border-bottom scrollarea" style="padding: 2px;flex-flow: row;">
+                  <div id="selectedColor" style="padding: 5px; border-radius: 5px;">
+                    <div style="padding: 5px;"></div>
+                  </div>
+                  <div style="padding: 5px;">Cor Selecionada</div>
                 </div>
               </div>
             </div>
@@ -180,25 +198,82 @@
 
     </div>
 
-    <script type="text/javascript">
+    <!-- Add Cards Liga Magic -->
+    <div class="modal fade" id="addCardsLigaMagic" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Jogar utilizando Deck do Liga Magic</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="closeModal('#addCardsLigaMagic')"></button>
+          </div>
+          <div class="modal-body">
+            <label for="deckUri">Insira o Endereço do Deck</label>
+            <input id="deckUri" class="form-control" type="text" placeholder="URL do deck">
+          </div>
+          <div class="modal-footer" style="flex-flow: row;">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="closeModal('#addCardsLigaMagic')">Cancelar</button>
+            <button type="button" class="btn btn-primary" onclick="addCardsLigaMagic()">Confirmar</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
+    
+    <script type="text/javascript">
         var server = (location.hostname === "localhost" || location.hostname === "127.0.0.1")
           ? "localhost"
           : "192.168.0.110";
 
         var socket = io('http://' + server + ':3000');
         
-        var spacePressed = false;
+        const keyCode_space = 32;
+        const keyCode_0 = 48;
+        const keyCode_1 = 49;
+        const keyCode_2 = 50;
+        const keyCode_3 = 51;
+        const keyCode_4 = 52;
+        const keyCode_5 = 53;
+        const keyCode_6 = 54;
+        const keyCode_7 = 55;
+        const keyCode_8 = 56;
+        const keyCode_9 = 57;
+        
+        var keySpacePressed = false;
+        var key0Pressed = false;
+        var key1Pressed = false;
+        var key2Pressed = false;
+        var key3Pressed = false;
+        var key4Pressed = false;
+        var key5Pressed = false;
+        var key6Pressed = false;
+        var key7Pressed = false;
+        var key8Pressed = false;
+        var key9Pressed = false;
+
         $(window).keydown(function(ev) {
-          if (ev.which == 32) { // space
-            spacePressed = true;
-            console.log(spacePressed)
-          }
+          if (ev.which == keyCode_space) {keySpacePressed = true;}
+          if (ev.which == keyCode_0) {key0Pressed = true;}
+          if (ev.which == keyCode_1) {key1Pressed = true;}
+          if (ev.which == keyCode_2) {key2Pressed = true;}
+          if (ev.which == keyCode_3) {key3Pressed = true;}
+          if (ev.which == keyCode_4) {key4Pressed = true;}
+          if (ev.which == keyCode_5) {key5Pressed = true;}
+          if (ev.which == keyCode_6) {key6Pressed = true;}
+          if (ev.which == keyCode_7) {key7Pressed = true;}
+          if (ev.which == keyCode_8) {key8Pressed = true;}
+          if (ev.which == keyCode_9) {key9Pressed = true;}
         }).keyup(function(ev) {
-          if (ev.which == 32) { // space
-            spacePressed = false;
-            console.log(spacePressed)
-          }
+          if (ev.which == keyCode_space) {keySpacePressed = false;}
+          if (ev.which == keyCode_0) {key0Pressed  = false;}
+          if (ev.which == keyCode_1) {key1Pressed  = false;}
+          if (ev.which == keyCode_2) {key2Pressed  = false;}
+          if (ev.which == keyCode_3) {key3Pressed  = false;}
+          if (ev.which == keyCode_4) {key4Pressed  = false;}
+          if (ev.which == keyCode_5) {key5Pressed  = false;}
+          if (ev.which == keyCode_6) {key6Pressed  = false;}
+          if (ev.which == keyCode_7) {key7Pressed  = false;}
+          if (ev.which == keyCode_8) {key8Pressed  = false;}
+          if (ev.which == keyCode_9) {key9Pressed  = false;}
         });
 
         const EContainers = Object.freeze({
@@ -241,22 +316,39 @@
         }
 
         function setColor(color){
+          console.log(color)
+          document.getElementById('selectedColor').className = color;
           selectedColor = color;
           console.log(color)
         }
 
-        function applyColor(cardId){
-          console.log("color", selectedColor)
+        function getColorFront(color){
+          if (color == "Cor") { return "blue;"}
+          if (color == "Cor") { return "blueviolet;"}
+          if (color == "Cor") { return "crimson;"}
+          if (color == "Cor") { return "darkgreen;"}
+          if (color == "Cor") { return "deeppink;"}
+          if (color == "Cor") { return "hotpink;"}
+          if (color == "Cor") { return "red;"}
+          if (color == "Cor") { return "yellow;"}
+          if (color == "Cor") { return "orangered;"}
+          if (color == "Cor") { return "springgreen;"}
+          if (color == "Cor") { return "blue;"}
+          if (color == "Cor") { return "blue;"}
+        }
+
+        function applyColor(cardId, color){
+          console.log("color", color)
           console.log("cardId", cardId)
           var data = {
             cardId: cardId,
-            color: selectedColor
+            color: color
           }
           socket.emit('setColor', data);
         }
 
         function updateGame(game){
-
+          console.log("update Game", game);
           $("#logs").html('');
           if (player != "Player1" && player != "Player2"){
             return;
@@ -303,8 +395,6 @@
             ? card.uri
             : defaultCard;
           
-          console.log("Container ► ", container)
-
           $(container).append(`
             <div class="mtgCardBox ` + turned + color + `">
               <img 
@@ -401,14 +491,21 @@
         function clickCard(ev){
           console.log("click");
           
-          if (spacePressed){
-            console.log("entrou")
-            applyColor(ev.target.id)
-            return;
-          }
+          if (keySpacePressed){applyColor(ev.target.id, selectedColor); return;}
+          if (key0Pressed){applyColor(ev.target.id, 'colorblue'); return;}
+          if (key1Pressed){applyColor(ev.target.id, 'colorblueviolet'); return;}
+          if (key2Pressed){applyColor(ev.target.id, 'colordeeppink'); return;}
+          if (key3Pressed){applyColor(ev.target.id, 'colorhotpink'); return;}
+          if (key4Pressed){applyColor(ev.target.id, 'colorred'); return;}
+          if (key5Pressed){applyColor(ev.target.id, 'coloryellow'); return;}
+          if (key6Pressed){applyColor(ev.target.id, 'colororangered'); return;}
+          if (key7Pressed){applyColor(ev.target.id, 'colorspringgreen'); return;}
+          if (key8Pressed){applyColor(ev.target.id, 'colormidnightblue'); return;}
+          if (key9Pressed){applyColor(ev.target.id, 'colorolivedrab'); return;}
 
           // se control estiver pressionado
           if (ev.ctrlKey){
+            console.log("turncard")
             turnCard(ev)
             return;
           } 
@@ -438,6 +535,22 @@
           `)
         }
         
+        function showModal(modal){
+          $(modal).modal();
+        }
+
+        function closeModal(modal){
+          $(modal).modal('hide');
+        }
+
+        function addCardsLigaMagic(){
+          var uri = $("#deckUri").val();
+          var data = {
+            uri: uri,
+            player: player
+          }
+          socket.emit('addCardsFromLigaMagic', data);
+        }
 
     </script>
 </body>
