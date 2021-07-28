@@ -5,29 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MTG Simulator</title>
-    
-
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js" integrity="sha512-2rNj2KJ+D8s1ceNasTIex6z4HWyOnEYLVC3FigGOmyQCZc2eBXKgOxQmo3oKLHyfcj53uz4QMsRCWNbLd32Q1g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
-    
+  
     <!-- Socket IO -->
     <script src="https://cdn.socket.io/3.1.3/socket.io.min.js" integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh" crossorigin="anonymous"></script>
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
-
-    <!-- JQuery -->
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
-
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/js/bootstrap.min.js" integrity="sha512-a6ctI6w1kg3J4dSjknHj3aWLEbjitAXAjLDRUxo2wyYmDFRcz2RJuQr5M3Kt8O/TtUSp8n2rAyaXYy1sjoKmrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"> -->
-
-
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -39,48 +24,13 @@
         <div id="floatLeft" class="col-xl-2">
             <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 100%;">
 
-              <div class="btn-group btn-group-toggle" style="text-align: center;" data-toggle="buttons">
-                <label class="btn btn-secondary active">
-                  <input type="radio" name="options" id="option1" autocomplete="off" checked=""> <h3>-</h3>
-                </label>
-                <label class="btn btn-secondary">
-                  <input type="radio" name="options" id="option2" autocomplete="off" disabled=""><h3 id="#lifeOpponent">0</h3>
-                </label>
-                <label class="btn btn-secondary active">
-                  <input type="radio" name="options" id="option3" autocomplete="off"><h3>+</h3>
-                </label>
-              </div>
-              
                 <hr>
                 <ul class="nav nav-pills flex-column mb-auto">
 
-                  <button onclick="showModal('#addCardsLigaMagic')" type="button" class="btn btn-primary leftMenuButtons" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    Usar deck da Liga Magic
+                  <button id="btnShowCardsLigaMagic" onclick="showModal('#addCardsLigaMagic')" type="button" class="btn btn-primary leftMenuButtons" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Entrar na Partida
                   </button>
 
-                  <button type="button" class="btn btn-primary leftMenuButtons" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    Launch demo modal
-                  </button>
-
-                  <button type="button" class="btn btn-primary leftMenuButtons" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    Launch demo modal
-                  </button>
-
-                  <button type="button" class="btn btn-primary leftMenuButtons" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    Launch demo modal
-                  </button>
-
-                  <button type="button" class="btn btn-primary leftMenuButtons" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    Launch demo modal
-                  </button>
-
-                  <button type="button" class="btn btn-primary leftMenuButtons" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    Launch demo modal
-                  </button>
-
-                  <button type="button" class="btn btn-primary leftMenuButtons" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    Launch demo modal
-                  </button>
                 </ul>
                 <div id="playerName"></div>
                 <div style="
@@ -92,41 +42,31 @@
                   flex-wrap: wrap;">
 
                   <div style="display: flex;">
-                    <div class="pile">
+
+                    <div id="exilium" class="pile">
                       <div class="titlePile">Exílio</div>
                       <img src="https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg" alt="" width="60pt">
                     </div>
-                    <div class="pile">
+                    <div id="grave" class="pile">
                       <div class="titlePile">Cemitério</div>
                       <img src="https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg" alt="" width="60pt">
                     </div>
-                    <div class="pile">
+                    <div id="commander" class="pile">
                       <div class="titlePile">Comando</div>
                       <img src="https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg" alt="" width="60pt">
                     </div>
+
                   </div>
-                  <div style="display: flex;">
-                    <div class="pile">
+                  <div id="deck" style="display: flex;">
+                    <div  class="pile">
                       <div class="titlePile">Grimório</div>
                       <img id="draw" draggable="true" ondragstart="drag(event)" src="https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg" alt="" width="180pt">
                     </div>
                   </div>
                 </div>
                 
-                
                 <hr>
                 
-                <div class="btn-group btn-group-toggle" style="text-align: center;" data-toggle="buttons">
-                  <label class="btn btn-secondary active">
-                    <input type="radio" name="options" id="option1" autocomplete="off" checked=""> <h3>-</h3>
-                  </label>
-                  <label class="btn btn-secondary">
-                    <input type="radio" name="options" id="option2" autocomplete="off" disabled=""><h3 id="lifePlayer">0</h3>
-                  </label>
-                  <label class="btn btn-secondary active">
-                    <input type="radio" name="options" id="option3" autocomplete="off"><h3>+</h3>
-                  </label>
-                </div>
                 <div class="dropdown">
                   
                   <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
@@ -198,13 +138,17 @@
 
     </div>
 
-    <!-- Add Cards Liga Magic -->
+    <!-- MODAL Add Cards Liga Magic -->
     <div class="modal fade" id="addCardsLigaMagic" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="staticBackdropLabel">Jogar utilizando Deck do Liga Magic</h5>
+            <h5 class="modal-title" id="staticBackdropLabel">Iniciar Jogo</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="closeModal('#addCardsLigaMagic')"></button>
+          </div>
+          <div class="modal-body">
+            <label for="deckUri">Nome</label>
+            <input id="playerName" class="form-control" type="text" placeholder="URL do deck">
           </div>
           <div class="modal-body">
             <label for="deckUri">Insira o Endereço do Deck</label>
@@ -212,7 +156,7 @@
           </div>
           <div class="modal-footer" style="flex-flow: row;">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="closeModal('#addCardsLigaMagic')">Cancelar</button>
-            <button type="button" class="btn btn-primary" onclick="addCardsLigaMagic()">Confirmar</button>
+            <button type="button" class="btn btn-primary" onclick="init()">Confirmar</button>
           </div>
         </div>
       </div>
@@ -220,12 +164,8 @@
 
     
     <script type="text/javascript">
-        var server = (location.hostname === "localhost" || location.hostname === "127.0.0.1")
-          ? "localhost"
-          : "192.168.0.110";
 
-        var socket = io('http://' + server + ':3000');
-        
+        // consts
         const keyCode_space = 32;
         const keyCode_0 = 48;
         const keyCode_1 = 49;
@@ -237,7 +177,12 @@
         const keyCode_7 = 55;
         const keyCode_8 = 56;
         const keyCode_9 = 57;
-        
+
+        var defaultCard = "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg";
+        var SelectedObject = {};
+        var selectedColor = "none";
+        var player = "";
+        var refreshDeck = false;
         var keySpacePressed = false;
         var key0Pressed = false;
         var key1Pressed = false;
@@ -249,7 +194,31 @@
         var key7Pressed = false;
         var key8Pressed = false;
         var key9Pressed = false;
+        var socket = setServer();
+        
+        showDeck();
+        
+        function showDeck(){
+          if (refreshDeck){
+            $("#exilium").show();
+            $("#grave").show();
+            $("#commander").show();
+            $("#deck").show();
+          }else{
+            $("#exilium").hide();
+            $("#grave").hide();
+            $("#commander").hide();
+            $("#deck").hide();
+          }
+        }
 
+        function setServer(){
+          var server = (location.hostname === "localhost" || location.hostname === "127.0.0.1")
+            ? "localhost"
+            : "192.168.0.110";
+          return io('http://' + server + ':3000');
+        }
+        
         $(window).keydown(function(ev) {
           if (ev.which == keyCode_space) {keySpacePressed = true;}
           if (ev.which == keyCode_0) {key0Pressed = true;}
@@ -276,264 +245,244 @@
           if (ev.which == keyCode_9) {key9Pressed  = false;}
         });
 
-        const EContainers = Object.freeze({
-          "player1Land" : 1,
-          "player2Land" : 2,
-          "player1NonLand" : 3,
-          "player2NonLand" : 4,
-          "player1Grave" : 5,
-          "player2Grave" : 6,
-          "player1Exilium" : 7,
-          "player2Exilium" : 8,
-          "player1Deck" : 9,
-          "player2Deck" : 10,
-          "player1Command": 11,
-          "player2Command": 12,
-          "player1Hand": 13,
-          "player2Hand": 14,
-        })
-
-
-        var AllCards = {};
-        var SelectedObject = {};
-        var player = "";
-        var defaultCard = "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg";
-        var selectedColor = "none";
-
         socket.on('updateGame', function(game){
           updateGame(game);
         })
 
-        socket.on('setPlayer', function(playerName){
-          addPlayer(playerName);
-        })
+        // socket.on('setPlayer', function(playerName){
+        //   addPlayer(playerName);
+        // })
 
-        function addPlayer(playerName){
-          player = playerName;
-          $("#playerName").html('');
-          $("#playerName").append(player);
-          socket.emit('addPlayer', player);
-        }
+        // function addPlayer(playerName){
+        //   player = playerName;
+        //   $("#playerName").html('');
+        //   $("#playerName").append(player);
+        //   socket.emit('addPlayer', player);
+        // }
 
-        function setColor(color){
-          console.log(color)
-          document.getElementById('selectedColor').className = color;
-          selectedColor = color;
-          console.log(color)
-        }
+        // function setColor(color){
+        //   console.log(color)
+        //   document.getElementById('selectedColor').className = color;
+        //   selectedColor = color;
+        //   console.log(color)
+        // }
 
-        function getColorFront(color){
-          if (color == "Cor") { return "blue;"}
-          if (color == "Cor") { return "blueviolet;"}
-          if (color == "Cor") { return "crimson;"}
-          if (color == "Cor") { return "darkgreen;"}
-          if (color == "Cor") { return "deeppink;"}
-          if (color == "Cor") { return "hotpink;"}
-          if (color == "Cor") { return "red;"}
-          if (color == "Cor") { return "yellow;"}
-          if (color == "Cor") { return "orangered;"}
-          if (color == "Cor") { return "springgreen;"}
-          if (color == "Cor") { return "blue;"}
-          if (color == "Cor") { return "blue;"}
-        }
+        // function getColorFront(color){
+        //   if (color == "Cor") { return "blue;"}
+        //   if (color == "Cor") { return "blueviolet;"}
+        //   if (color == "Cor") { return "crimson;"}
+        //   if (color == "Cor") { return "darkgreen;"}
+        //   if (color == "Cor") { return "deeppink;"}
+        //   if (color == "Cor") { return "hotpink;"}
+        //   if (color == "Cor") { return "red;"}
+        //   if (color == "Cor") { return "yellow;"}
+        //   if (color == "Cor") { return "orangered;"}
+        //   if (color == "Cor") { return "springgreen;"}
+        //   if (color == "Cor") { return "blue;"}
+        //   if (color == "Cor") { return "blue;"}
+        // }
 
-        function applyColor(cardId, color){
-          console.log("color", color)
-          console.log("cardId", cardId)
-          var data = {
-            cardId: cardId,
-            color: color
-          }
-          socket.emit('setColor', data);
-        }
+        // function applyColor(cardId, color){
+        //   console.log("color", color)
+        //   console.log("cardId", cardId)
+        //   var data = {
+        //     cardId: cardId,
+        //     color: color
+        //   }
+        //   socket.emit('setColor', data);
+        // }
 
         function updateGame(game){
-          console.log("update Game", game);
-          $("#logs").html('');
-          if (player != "Player1" && player != "Player2"){
-            return;
-          }
-
-          clear();
-
-          for(var card of game.cards){
-            renderCard(card);
-          }
-
-          for(var log of game.logs){
-            renderLog(log);
-          }
+          console.log("game", game);
         }
 
-        function clear(){
-          $("#containerTop").html('');
-          $("#arenaOpponentLands").html('');
-          $("#arenaOpponentCards").html('');
-          $("#arenaPlayerCards").html('');
-          $("#arenaPlayerLands").html('');
-          $("#containerBottom").html('');
-        }
+        // function updateGame(game){
+        //   console.log("update Game", game);
+        //   $("#logs").html('');
+        //   if (player != "Player1" && player != "Player2"){
+        //     return;
+        //   }
 
-        function renderCard(card){
+        //   clear();
 
-          // Força exibição de cards que estão em jogo (necessário melhoria para utilizar "Profetizar")
-          if (card.container != "player1Hand" && card.container != "player2Hand"){
-            card.reveal = true;
-          }
+        //   for(var card of game.cards){
+        //     renderCard(card);
+        //   }
 
-          // não denderiza cartas dos decks
-          if (card.container == "player1Deck" || card.container == "player2Deck"){
-            return;
-          }
+        //   for(var log of game.logs){
+        //     renderLog(log);
+        //   }
+        // }
 
-          var container = getContainer(card);
+        // function clear(){
+        //   $("#containerTop").html('');
+        //   $("#arenaOpponentLands").html('');
+        //   $("#arenaOpponentCards").html('');
+        //   $("#arenaPlayerCards").html('');
+        //   $("#arenaPlayerLands").html('');
+        //   $("#containerBottom").html('');
+        // }
+
+        // function renderCard(card){
+
+        //   // Força exibição de cards que estão em jogo (necessário melhoria para utilizar "Profetizar")
+        //   if (card.container != "player1Hand" && card.container != "player2Hand"){
+        //     card.reveal = true;
+        //   }
+
+        //   // não denderiza cartas dos decks
+        //   if (card.container == "player1Deck" || card.container == "player2Deck"){
+        //     return;
+        //   }
+
+        //   var container = getContainer(card);
           
-          var turned = card.turned ? " turned " : "";
-          var color = card.color != " none " ? " " + card.color + " " : ""
-          var id = card.id;
-          var img = (card.reveal ||  card.owner == player)
-            ? card.uri
-            : defaultCard;
+        //   var turned = card.turned ? " turned " : "";
+        //   var color = card.color != " none " ? " " + card.color + " " : ""
+        //   var id = card.id;
+        //   var img = (card.reveal ||  card.owner == player)
+        //     ? card.uri
+        //     : defaultCard;
           
-          $(container).append(`
-            <div class="mtgCardBox ` + turned + color + `">
-              <img 
-                id="` + id + `" 
-                draggable="true" 
-                ondragstart="drag(event)" 
-                onClick="clickCard(event)"
-                class="mtgCard" 
-                src="` + img + `" 
-                >
-              </div>
-          `);
-        }
+        //   $(container).append(`
+        //     <div class="mtgCardBox ` + turned + color + `">
+        //       <img 
+        //         id="` + id + `" 
+        //         draggable="true" 
+        //         ondragstart="drag(event)" 
+        //         onClick="clickCard(event)"
+        //         class="mtgCard" 
+        //         src="` + img + `" 
+        //         >
+        //       </div>
+        //   `);
+        // }
 
-        function renderLog(log){
-          $("#logs").append(`
-            <div class="list-group-item list-group-item-action py-3 lh-tight">
-              <div class="d-flex w-100 align-items-center justify-content-between">
-                <div class="col-10 mb-1 small">` + log.text + `</div>
-                <small class="text-muted">` + log.time + `</small>
-              </div>
-            </div>
-          `);
-        }
+        // function renderLog(log){
+        //   $("#logs").append(`
+        //     <div class="list-group-item list-group-item-action py-3 lh-tight">
+        //       <div class="d-flex w-100 align-items-center justify-content-between">
+        //         <div class="col-10 mb-1 small">` + log.text + `</div>
+        //         <small class="text-muted">` + log.time + `</small>
+        //       </div>
+        //     </div>
+        //   `);
+        // }
 		
-		    function getContainer(card){
-          if(player == "Player1"){
-            if(card.container == "player1Land") {return "#arenaPlayerLands"};
-            if(card.container == "player2Land") {return "#arenaOpponentLands"};
-            if(card.container == "player1NonLand") {return "#arenaPlayerCards"};
-            if(card.container == "player2NonLand") {return "#arenaOpponentCards"};
-            if(card.container == "player1Hand") {return "#containerBottom"};
-            if(card.container == "player2Hand") {return "#containerTop"};
-          }
-          if(player == "Player2"){
-            if(card.container == "player1Land") {return "#arenaOpponentLands"};
-            if(card.container == "player2Land") {return "#arenaPlayerLands"};
-            if(card.container == "player1NonLand") {return "#arenaOpponentCards"};
-            if(card.container == "player2NonLand") {return "#arenaPlayerCards"};
-            if(card.container == "player1Hand") {return "#containerTop"};
-            if(card.container == "player2Hand") {return "#containerBottom"};
-          }
-        }
+		    // function getContainer(card){
+        //   if(player == "Player1"){
+        //     if(card.container == "player1Land") {return "#arenaPlayerLands"};
+        //     if(card.container == "player2Land") {return "#arenaOpponentLands"};
+        //     if(card.container == "player1NonLand") {return "#arenaPlayerCards"};
+        //     if(card.container == "player2NonLand") {return "#arenaOpponentCards"};
+        //     if(card.container == "player1Hand") {return "#containerBottom"};
+        //     if(card.container == "player2Hand") {return "#containerTop"};
+        //   }
+        //   if(player == "Player2"){
+        //     if(card.container == "player1Land") {return "#arenaOpponentLands"};
+        //     if(card.container == "player2Land") {return "#arenaPlayerLands"};
+        //     if(card.container == "player1NonLand") {return "#arenaOpponentCards"};
+        //     if(card.container == "player2NonLand") {return "#arenaPlayerCards"};
+        //     if(card.container == "player1Hand") {return "#containerTop"};
+        //     if(card.container == "player2Hand") {return "#containerBottom"};
+        //   }
+        // }
 
-        function getContainerReverse(container){
-          if(player == "Player1"){
-            if(container == "arenaPlayerLands") {return "player1Land"};
-            if(container == "arenaOpponentLands") {return "player2Land"};
-            if(container == "arenaPlayerCards") {return "player1NonLand"};
-            if(container == "arenaOpponentCards") {return "player2NonLand"};
-            if(container == "containerBottom") {return "player1Hand"};
-            if(container == "containerTop") {return "player2Hand"};
-          }
-          if(player == "Player2"){
-            if(container == "arenaOpponentLands") {return "player1Land"};
-            if(container == "arenaPlayerLands") {return "player2Land"};
-            if(container == "arenaOpponentCards") {return "player1NonLand"};
-            if(container == "arenaPlayerCards") {return "player2NonLand"};
-            if(container == "containerTop") {return "player1Hand"};
-            if(container == "containerBottom") {return "player2Hand"};
-          }
-        }
+        // function getContainerReverse(container){
+        //   if(player == "Player1"){
+        //     if(container == "arenaPlayerLands") {return "player1Land"};
+        //     if(container == "arenaOpponentLands") {return "player2Land"};
+        //     if(container == "arenaPlayerCards") {return "player1NonLand"};
+        //     if(container == "arenaOpponentCards") {return "player2NonLand"};
+        //     if(container == "containerBottom") {return "player1Hand"};
+        //     if(container == "containerTop") {return "player2Hand"};
+        //   }
+        //   if(player == "Player2"){
+        //     if(container == "arenaOpponentLands") {return "player1Land"};
+        //     if(container == "arenaPlayerLands") {return "player2Land"};
+        //     if(container == "arenaOpponentCards") {return "player1NonLand"};
+        //     if(container == "arenaPlayerCards") {return "player2NonLand"};
+        //     if(container == "containerTop") {return "player1Hand"};
+        //     if(container == "containerBottom") {return "player2Hand"};
+        //   }
+        // }
 
-        function dragable(selected){
-            dragElement(document.getElementById(selected));
-        }
+        // function dragable(selected){
+        //     dragElement(document.getElementById(selected));
+        // }
         
-        function allowDrop(ev) {
-          ev.preventDefault();
-        }
+        // function allowDrop(ev) {
+        //   ev.preventDefault();
+        // }
 
-        function drag(ev) {
-          ev.dataTransfer.setData("text", ev.target.id);
-        }
+        // function drag(ev) {
+        //   ev.dataTransfer.setData("text", ev.target.id);
+        // }
 
-        function drop(ev) {
-          ev.preventDefault();
-          var data = ev.dataTransfer.getData("text");
-          if (data == "draw"){
-            socket.emit('draw', player);
-            return;
-          }
-          moveCard(data, ev.toElement.id);
-          ev.target.appendChild(document.getElementById(data));
-        }
+        // function drop(ev) {
+        //   ev.preventDefault();
+        //   var data = ev.dataTransfer.getData("text");
+        //   if (data == "draw"){
+        //     socket.emit('draw', player);
+        //     return;
+        //   }
+        //   moveCard(data, ev.toElement.id);
+        //   ev.target.appendChild(document.getElementById(data));
+        // }
 
-        function moveCard(cardId, container){
-          socket.emit('move', {
-              cardId: cardId,
-              container: getContainerReverse(container)
-          });
-        }
+        // function moveCard(cardId, container){
+        //   socket.emit('move', {
+        //       cardId: cardId,
+        //       container: getContainerReverse(container)
+        //   });
+        // }
         
-        function clickCard(ev){
-          console.log("click");
+        // function clickCard(ev){
+        //   console.log("click");
           
-          if (keySpacePressed){applyColor(ev.target.id, selectedColor); return;}
-          if (key0Pressed){applyColor(ev.target.id, 'colorblue'); return;}
-          if (key1Pressed){applyColor(ev.target.id, 'colorblueviolet'); return;}
-          if (key2Pressed){applyColor(ev.target.id, 'colordeeppink'); return;}
-          if (key3Pressed){applyColor(ev.target.id, 'colorhotpink'); return;}
-          if (key4Pressed){applyColor(ev.target.id, 'colorred'); return;}
-          if (key5Pressed){applyColor(ev.target.id, 'coloryellow'); return;}
-          if (key6Pressed){applyColor(ev.target.id, 'colororangered'); return;}
-          if (key7Pressed){applyColor(ev.target.id, 'colorspringgreen'); return;}
-          if (key8Pressed){applyColor(ev.target.id, 'colormidnightblue'); return;}
-          if (key9Pressed){applyColor(ev.target.id, 'colorolivedrab'); return;}
+        //   if (keySpacePressed){applyColor(ev.target.id, selectedColor); return;}
+        //   if (key0Pressed){applyColor(ev.target.id, 'colorblue'); return;}
+        //   if (key1Pressed){applyColor(ev.target.id, 'colorblueviolet'); return;}
+        //   if (key2Pressed){applyColor(ev.target.id, 'colordeeppink'); return;}
+        //   if (key3Pressed){applyColor(ev.target.id, 'colorhotpink'); return;}
+        //   if (key4Pressed){applyColor(ev.target.id, 'colorred'); return;}
+        //   if (key5Pressed){applyColor(ev.target.id, 'coloryellow'); return;}
+        //   if (key6Pressed){applyColor(ev.target.id, 'colororangered'); return;}
+        //   if (key7Pressed){applyColor(ev.target.id, 'colorspringgreen'); return;}
+        //   if (key8Pressed){applyColor(ev.target.id, 'colormidnightblue'); return;}
+        //   if (key9Pressed){applyColor(ev.target.id, 'colorolivedrab'); return;}
 
-          // se control estiver pressionado
-          if (ev.ctrlKey){
-            console.log("turncard")
-            turnCard(ev)
-            return;
-          } 
+        //   // se control estiver pressionado
+        //   if (ev.ctrlKey){
+        //     console.log("turncard")
+        //     turnCard(ev)
+        //     return;
+        //   } 
 
-          //se alt estiver pressionado
-          if (ev.altKey){
-            revealCard(ev)
-            return;
-          } 
+        //   //se alt estiver pressionado
+        //   if (ev.altKey){
+        //     revealCard(ev)
+        //     return;
+        //   } 
 
-          viewCard(ev);
-        }
+        //   viewCard(ev);
+        // }
 
-        function revealCard(ev){
-          socket.emit('reveal', ev.target.id);
-        }
+        // function revealCard(ev){
+        //   socket.emit('reveal', ev.target.id);
+        // }
 
-        function turnCard(ev){
-          socket.emit('turn', ev.target.id);
-        }
+        // function turnCard(ev){
+        //   socket.emit('turn', ev.target.id);
+        // }
 
-        function viewCard(ev){
-          var cardUri = ev.srcElement.currentSrc;
-          $("#amplifierCard").html('');
-          $("#amplifierCard").append(`
-            <img src="` + cardUri + `">
-          `)
-        }
+        // function viewCard(ev){
+        //   var cardUri = ev.srcElement.currentSrc;
+        //   $("#amplifierCard").html('');
+        //   $("#amplifierCard").append(`
+        //     <img src="` + cardUri + `">
+        //   `)
+        // }
         
         function showModal(modal){
           $(modal).modal();
@@ -543,14 +492,24 @@
           $(modal).modal('hide');
         }
 
-        function addCardsLigaMagic(){
+        function init(){
           var uri = $("#deckUri").val();
+          player = $("#playerName").val();
           var data = {
             uri: uri,
             player: player
           }
-          socket.emit('addCardsFromLigaMagic', data);
+          socket.emit('init', data);
         }
+
+        // function addCardsLigaMagic(){
+        //   var uri = $("#deckUri").val();
+        //   var data = {
+        //     uri: uri,
+        //     player: player
+        //   }
+        //   socket.emit('addCardsFromLigaMagic', data);
+        // }
 
     </script>
 </body>
