@@ -209,3 +209,8 @@
     border-color: #5f5f5f;
     width: 100%;
   }
+
+  .nameLog{
+    color: #088e08;
+    font-weight: bold;
+  }
