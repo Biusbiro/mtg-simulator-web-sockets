@@ -32,7 +32,7 @@
                   </button>
 
                 </ul>
-                <div id="playerName"></div>
+                <div id="playerNameLabel"></div>
                 <div style="
                   display: flex;
                   flex-direction: column;
@@ -154,6 +154,12 @@
             <label for="deckUri">Insira o Endereço do Deck</label>
             <input id="deckUri" class="form-control" type="text" placeholder="URL do deck">
           </div>
+          <div id="alertAddCards" class="alert alert-dark m-3" role="alert">
+            <div class="spinner-border" role="status" style="margin-right: 10px;">
+              <span class="sr-only">Loading...</span>
+            </div>
+            Carregando os cards
+          </div>
           <div class="modal-footer" style="flex-flow: row;">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="closeModal('#addCardsLigaMagic')">Cancelar</button>
             <button type="button" class="btn btn-primary" onclick="init()">Confirmar</button>
@@ -164,6 +170,7 @@
 
     
     <script type="text/javascript">
+        $("#alertAddCards").hide();
 
         // consts
         const keyCode_space = 32;
@@ -249,9 +256,13 @@
           updateGame(game);
         })
 
-        // socket.on('setPlayer', function(playerName){
-        //   addPlayer(playerName);
-        // })
+        socket.on('showLoading', function(game){
+          showLoading(game);
+        })
+
+        socket.on('closeModalAddCards', function(game){
+          closeModal('#addCardsLigaMagic');
+        })
 
         // function addPlayer(playerName){
         //   player = playerName;
@@ -292,101 +303,116 @@
         //   socket.emit('setColor', data);
         // }
 
-        function updateGame(game){
-          console.log("game", game);
+        function showLoading(game){
+          $("#alertAddCards").show();
         }
 
-        // function updateGame(game){
-        //   console.log("update Game", game);
-        //   $("#logs").html('');
-        //   if (player != "Player1" && player != "Player2"){
-        //     return;
-        //   }
+        function updateGame(game){
+          console.log("update Game", game);
+          if (player == ""){
+            return;
+          }
+          $("#logs").html('');
+          // if (player != "Player1" && player != "Player2"){
+          //   return;
+          // }
 
-        //   clear();
+          clear();
 
-        //   for(var card of game.cards){
-        //     renderCard(card);
-        //   }
+          renderCards(game.players);
+          renderLogs(game.logs);
+          // renderPannels(game.players);
+        }
 
-        //   for(var log of game.logs){
-        //     renderLog(log);
-        //   }
-        // }
+        function renderLogs(logs){
+          for(var log of logs){
+            renderLog(log);
+          }
+        }
 
-        // function clear(){
-        //   $("#containerTop").html('');
-        //   $("#arenaOpponentLands").html('');
-        //   $("#arenaOpponentCards").html('');
-        //   $("#arenaPlayerCards").html('');
-        //   $("#arenaPlayerLands").html('');
-        //   $("#containerBottom").html('');
-        // }
+        function renderCards(players){
+          var selectedPlayer = players.filter(function(item) { return item.name == player });
+          var versusPlayer = players.filter(function(item) { return item.name != player });
 
-        // function renderCard(card){
+          console.log("selectedPlayer", selectedPlayer);
+          console.log("versusPlayer", versusPlayer);
 
-        //   // Força exibição de cards que estão em jogo (necessário melhoria para utilizar "Profetizar")
-        //   if (card.container != "player1Hand" && card.container != "player2Hand"){
-        //     card.reveal = true;
-        //   }
+          // for(var card of selectedPlayer.hand){renderCard(card, "containerBottom")};
+          // for(var card of selectedPlayer.lands){renderCard(card, "arenaPlayerLands")};
+          // for(var card of selectedPlayer.nonLands){renderCard(card, "arenaPlayerCards")};
+          // for(var card of selectedPlayer.xHand){renderCard(card, "containerTop")};
+          // for(var card of selectedPlayer.xLands){renderCard(card, "arenaOpponentLands")};
+          // for(var card of selectedPlayer.xNonLands){renderCard(card, "arenaOpponentCards")};
 
-        //   // não denderiza cartas dos decks
-        //   if (card.container == "player1Deck" || card.container == "player2Deck"){
-        //     return;
-        //   }
+          // for(var card of versusPlayer.hand){renderCard(card, "containerTop")};
+          // for(var card of versusPlayer.lands){renderCard(card, "arenaOpponentLands")};
+          // for(var card of versusPlayer.nonLands){renderCard(card, "arenaPlayerCards")};
+          // for(var card of versusPlayer.xHand){renderCard(card, "containerBottom")};
+          // for(var card of versusPlayer.xLands){renderCard(card, "arenaPlayerLands")};
+          // for(var card of versusPlayer.xNonLands){renderCard(card, "arenaPlayerCards")};
+        }
 
-        //   var container = getContainer(card);
+        function clear(){
+          $("#containerTop").html('');
+          $("#arenaOpponentLands").html('');
+          $("#arenaOpponentCards").html('');
+          $("#arenaPlayerCards").html('');
+          $("#arenaPlayerLands").html('');
+          $("#containerBottom").html('');
+        }
+
+        function renderCard(card, container){
+
+          var turned = card.turned ? " turned " : "";
+          var color = card.color != " none " ? " " + card.color + " " : ""
+          var id = card.id;
+          var img = (card.reveal ||  card.owner == player)
+            ? card.uri
+            : defaultCard;
           
-        //   var turned = card.turned ? " turned " : "";
-        //   var color = card.color != " none " ? " " + card.color + " " : ""
-        //   var id = card.id;
-        //   var img = (card.reveal ||  card.owner == player)
-        //     ? card.uri
-        //     : defaultCard;
-          
-        //   $(container).append(`
-        //     <div class="mtgCardBox ` + turned + color + `">
-        //       <img 
-        //         id="` + id + `" 
-        //         draggable="true" 
-        //         ondragstart="drag(event)" 
-        //         onClick="clickCard(event)"
-        //         class="mtgCard" 
-        //         src="` + img + `" 
-        //         >
-        //       </div>
-        //   `);
-        // }
+          $("#" + container).append(`
+            <div class="mtgCardBox ` + turned + color + `">
+              <img 
+                id="` + id + `" 
+                draggable="true" 
+                ondragstart="drag(event)" 
+                onClick="clickCard(event)"
+                class="mtgCard" 
+                src="` + img + `" 
+                >
+              </div>
+          `);
+        }
 
-        // function renderLog(log){
-        //   $("#logs").append(`
-        //     <div class="list-group-item list-group-item-action py-3 lh-tight">
-        //       <div class="d-flex w-100 align-items-center justify-content-between">
-        //         <div class="col-10 mb-1 small">` + log.text + `</div>
-        //         <small class="text-muted">` + log.time + `</small>
-        //       </div>
-        //     </div>
-        //   `);
-        // }
+        function renderLog(log){
+          $("#logs").append(`
+            <div class="list-group-item list-group-item-action py-3 lh-tight">
+              <div class="d-flex w-100 align-items-center justify-content-between">
+                <div class="col-10 mb-1 small">` + log.text + `</div>
+                <small class="text-muted">` + log.time + `</small>
+              </div>
+            </div>
+          `);
+        }
 		
-		    // function getContainer(card){
-        //   if(player == "Player1"){
-        //     if(card.container == "player1Land") {return "#arenaPlayerLands"};
-        //     if(card.container == "player2Land") {return "#arenaOpponentLands"};
-        //     if(card.container == "player1NonLand") {return "#arenaPlayerCards"};
-        //     if(card.container == "player2NonLand") {return "#arenaOpponentCards"};
-        //     if(card.container == "player1Hand") {return "#containerBottom"};
-        //     if(card.container == "player2Hand") {return "#containerTop"};
-        //   }
-        //   if(player == "Player2"){
-        //     if(card.container == "player1Land") {return "#arenaOpponentLands"};
-        //     if(card.container == "player2Land") {return "#arenaPlayerLands"};
-        //     if(card.container == "player1NonLand") {return "#arenaOpponentCards"};
-        //     if(card.container == "player2NonLand") {return "#arenaPlayerCards"};
-        //     if(card.container == "player1Hand") {return "#containerTop"};
-        //     if(card.container == "player2Hand") {return "#containerBottom"};
-        //   }
-        // }
+		    function getContainer(playerCard, container){
+          if(playerCard == player){
+            if(container == "player1Land") {return "#arenaPlayerLands"};
+            if(container == "player2Land") {return "#arenaOpponentLands"};
+            if(container == "player1NonLand") {return "#arenaPlayerCards"};
+            if(container == "player2NonLand") {return "#arenaOpponentCards"};
+            if(container == "player1Hand") {return "#containerBottom"};
+            if(container == "player2Hand") {return "#containerTop"};
+          }
+          else {
+            if(container == "player1Land") {return "#arenaOpponentLands"};
+            if(container == "player2Land") {return "#arenaPlayerLands"};
+            if(container == "player1NonLand") {return "#arenaOpponentCards"};
+            if(container == "player2NonLand") {return "#arenaPlayerCards"};
+            if(container == "player1Hand") {return "#containerTop"};
+            if(container == "player2Hand") {return "#containerBottom"};
+          }
+        }
 
         // function getContainerReverse(container){
         //   if(player == "Player1"){
@@ -493,6 +519,7 @@
         }
 
         function init(){
+          showLoading();
           var uri = $("#deckUri").val();
           player = $("#playerName").val();
           var data = {
@@ -501,16 +528,6 @@
           }
           socket.emit('init', data);
         }
-
-        // function addCardsLigaMagic(){
-        //   var uri = $("#deckUri").val();
-        //   var data = {
-        //     uri: uri,
-        //     player: player
-        //   }
-        //   socket.emit('addCardsFromLigaMagic', data);
-        // }
-
     </script>
 </body>
 </html>
