@@ -24,39 +24,11 @@ app.use('/', (req, res) => {
     res.render('index.html') ;
 });
 
-// const Player1Name = "Bismarck";
-// const Player2Name = "Renata";
-
-// var imgCardsPlayer1 = getCardsPlayer1();
-// var imgCardsPlayer2 = getCardsPlayer2();
-
-// var deckPlayer1 = getCards(imgCardsPlayer1, "player1Deck", 'Player1');
-// var deckPlayer2 = getCards(imgCardsPlayer2, "player2Deck", 'Player2');
-
-// var lifePlayer1 = 20;
-// var lifePlayer2 = 20;
-
-// var chargePlayer1 = 0;
-// var chargePlayer2 = 0;
-
-// var poisonPlayer1 = 0;
-// var poisonPlayer2 = 0;
-
-// var allCards = deckPlayer1.concat(deckPlayer2);cards = allCards
-
 var game = {
     cards: [],
     players: [],
     logs: []
 };
-
-// let messages = [];
-
-// rimraf.sync("./temp/"); // delete folder case exists
-// getCardsFromLigaMagic('https://www.ligamagic.com.br/?view=dks/deck&id=2574892'); // create folder
-
-
-
 
 // var htmlFile = fs.readFile('./temp/index.html', 'utf-8');
 // console.log(htmlFile);
@@ -86,10 +58,10 @@ io.on('connection', socket => {
     //     socket.emit('updateGame', game);
     // });
 
-    // socket.on('move', data => {
-    //     move(data);
-    //     socket.broadcast.emit('updateGame', game);
-    // });
+    socket.on('move', data => {
+        move(data);
+        socket.broadcast.emit('updateGame', game);
+    });
 
     // socket.on('draw', data => {
     //     draw(data);
@@ -142,10 +114,50 @@ console.log("started server!");
 //     card.turned = !card.turned;
 // }
 
-// function move(data){
-//     var card = game.cards.filter(function(item) { return item.id == data.cardId })[0];
-//     card.container = data.container;
-// }
+function move(data){
+    addToPile(removeFromPiles(data), data);
+}
+
+// remove a carta da pilha que estiver e retorna a carta
+function removeFromPiles(data){
+    var card = [];
+    var player = game.players.filter(function(item) { return item.name == data.player })[0];
+
+    card.push(removeFromPile(player.tokens, cardId));
+    card.push(removeFromPile(player.deck, cardId));
+    card.push(removeFromPile(player.hand, cardId));
+    card.push(removeFromPile(player.grave, cardId));
+    card.push(removeFromPile(player.exilium, cardId));
+    card.push(removeFromPile(player.lands, cardId));
+    card.push(removeFromPile(player.nonLands, cardId));
+    card.push(removeFromPile(player.xDeck, cardId));
+    card.push(removeFromPile(player.xGrave, cardId));
+    card.push(removeFromPile(player.xExilium, cardId));
+    card.push(removeFromPile(player.xLands, cardId));
+    card.push(removeFromPile(player.xNonLands, cardId));
+    card.push(removeFromPile(player.xHand, cardId));
+
+    return card[0];
+}
+
+function removeFromPile(container, cardId){
+    container = container.filter(function(item) { return item.id != cardId});
+    return container.filter(function(item) { return item.id == cardId})[0];
+}
+
+function addToPile(card, data){
+    var player = game.players.filter(function(item) { return item.name == data.player })[0];
+
+    switch (data.container) {
+        case "#arenaPlayerLands":   player.lands.push(card);     break;
+        case "#arenaOpponentLands": player.xLands.push(card);    break;
+        case "#arenaPlayerCards":   player.nonLands.push(card);  break;
+        case "#arenaOpponentCards": player.xNonLands.push(card); break;
+        case "#containerBottom":    player.hand.push(card);      break;
+        case "#containerTop":       player.xHand.push(card);     break;
+        default:                                                 break;
+    }
+}
 
 // function draw(player){
 //     var playerCards = game.cards.filter(function(item) { return item.owner == player });
@@ -224,7 +236,6 @@ async function addCardsFromLigaMagic(data){
     }
 
     var playerCards = getCards(listCards, data.player);
-
 
     return playerCards;
 }

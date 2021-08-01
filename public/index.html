@@ -331,25 +331,22 @@
         }
 
         function renderCards(players){
-          var selectedPlayer = players.filter(function(item) { return item.name == player });
-          var versusPlayer = players.filter(function(item) { return item.name != player });
+          var selectedPlayer = players.filter(function(item) { return item.name == player })[0];
+          var versusPlayer = players.filter(function(item) { return item.name != player })[0];
 
-          console.log("selectedPlayer", selectedPlayer);
-          console.log("versusPlayer", versusPlayer);
+          for(var card of selectedPlayer.hand){renderCard(card, "containerBottom")};
+          for(var card of selectedPlayer.lands){renderCard(card, "arenaPlayerLands")};
+          for(var card of selectedPlayer.nonLands){renderCard(card, "arenaPlayerCards")};
+          for(var card of selectedPlayer.xHand){renderCard(card, "containerTop")};
+          for(var card of selectedPlayer.xLands){renderCard(card, "arenaOpponentLands")};
+          for(var card of selectedPlayer.xNonLands){renderCard(card, "arenaOpponentCards")};
 
-          // for(var card of selectedPlayer.hand){renderCard(card, "containerBottom")};
-          // for(var card of selectedPlayer.lands){renderCard(card, "arenaPlayerLands")};
-          // for(var card of selectedPlayer.nonLands){renderCard(card, "arenaPlayerCards")};
-          // for(var card of selectedPlayer.xHand){renderCard(card, "containerTop")};
-          // for(var card of selectedPlayer.xLands){renderCard(card, "arenaOpponentLands")};
-          // for(var card of selectedPlayer.xNonLands){renderCard(card, "arenaOpponentCards")};
-
-          // for(var card of versusPlayer.hand){renderCard(card, "containerTop")};
-          // for(var card of versusPlayer.lands){renderCard(card, "arenaOpponentLands")};
-          // for(var card of versusPlayer.nonLands){renderCard(card, "arenaPlayerCards")};
-          // for(var card of versusPlayer.xHand){renderCard(card, "containerBottom")};
-          // for(var card of versusPlayer.xLands){renderCard(card, "arenaPlayerLands")};
-          // for(var card of versusPlayer.xNonLands){renderCard(card, "arenaPlayerCards")};
+          for(var card of versusPlayer.hand){renderCard(card, "containerTop")};
+          for(var card of versusPlayer.lands){renderCard(card, "arenaOpponentLands")};
+          for(var card of versusPlayer.nonLands){renderCard(card, "arenaPlayerCards")};
+          for(var card of versusPlayer.xHand){renderCard(card, "containerBottom")};
+          for(var card of versusPlayer.xLands){renderCard(card, "arenaPlayerLands")};
+          for(var card of versusPlayer.xNonLands){renderCard(card, "arenaPlayerCards")};
         }
 
         function clear(){
@@ -433,35 +430,36 @@
         //   }
         // }
 
-        // function dragable(selected){
-        //     dragElement(document.getElementById(selected));
-        // }
+        function dragable(selected){
+            dragElement(document.getElementById(selected));
+        }
         
-        // function allowDrop(ev) {
-        //   ev.preventDefault();
-        // }
+        function allowDrop(ev) {
+          ev.preventDefault();
+        }
 
-        // function drag(ev) {
-        //   ev.dataTransfer.setData("text", ev.target.id);
-        // }
+        function drag(ev) {
+          ev.dataTransfer.setData("text", ev.target.id);
+        }
 
-        // function drop(ev) {
-        //   ev.preventDefault();
-        //   var data = ev.dataTransfer.getData("text");
-        //   if (data == "draw"){
-        //     socket.emit('draw', player);
-        //     return;
-        //   }
-        //   moveCard(data, ev.toElement.id);
-        //   ev.target.appendChild(document.getElementById(data));
-        // }
+        function drop(ev) {
+          ev.preventDefault();
+          var data = ev.dataTransfer.getData("text");
+          if (data == "draw"){
+            socket.emit('draw', player);
+            return;
+          }
+          moveCard(data, ev.toElement.id);
+          ev.target.appendChild(document.getElementById(data));
+        }
 
-        // function moveCard(cardId, container){
-        //   socket.emit('move', {
-        //       cardId: cardId,
-        //       container: getContainerReverse(container)
-        //   });
-        // }
+        function moveCard(cardId, container, player){
+          socket.emit('move', {
+              cardId: cardId,
+              container: container,
+              player: player
+          });
+        }
         
         // function clickCard(ev){
         //   console.log("click");
