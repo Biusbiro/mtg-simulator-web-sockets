@@ -60,6 +60,7 @@ io.on('connection', socket => {
 
     socket.on('move', data => {
         move(data);
+        socket.emit('updateGame', game);
         socket.broadcast.emit('updateGame', game);
     });
 
@@ -115,6 +116,7 @@ console.log("started server!");
 // }
 
 function move(data){
+    game = game.players.filter(function(item) {return item.players.name != data.player})
     addToPile(removeFromPiles(data), data);
 }
 
@@ -122,41 +124,46 @@ function move(data){
 function removeFromPiles(data){
     var card = [];
     var player = game.players.filter(function(item) { return item.name == data.player })[0];
-
-    card.push(removeFromPile(player.tokens, cardId));
-    card.push(removeFromPile(player.deck, cardId));
-    card.push(removeFromPile(player.hand, cardId));
-    card.push(removeFromPile(player.grave, cardId));
-    card.push(removeFromPile(player.exilium, cardId));
-    card.push(removeFromPile(player.lands, cardId));
-    card.push(removeFromPile(player.nonLands, cardId));
-    card.push(removeFromPile(player.xDeck, cardId));
-    card.push(removeFromPile(player.xGrave, cardId));
-    card.push(removeFromPile(player.xExilium, cardId));
-    card.push(removeFromPile(player.xLands, cardId));
-    card.push(removeFromPile(player.xNonLands, cardId));
-    card.push(removeFromPile(player.xHand, cardId));
-
-    return card[0];
+    card.push(removeFromPile(player.tokens, data.cardId));
+    card.push(removeFromPile(player.deck, data.cardId));
+    card.push(removeFromPile(player.hand, data.cardId));
+    card.push(removeFromPile(player.grave, data.cardId));
+    card.push(removeFromPile(player.exilium, data.cardId));
+    card.push(removeFromPile(player.lands, data.cardId));
+    card.push(removeFromPile(player.nonLands, data.cardId));
+    card.push(removeFromPile(player.xDeck, data.cardId));
+    card.push(removeFromPile(player.xGrave, data.cardId));
+    card.push(removeFromPile(player.xExilium, data.cardId));
+    card.push(removeFromPile(player.xLands, data.cardId));
+    card.push(removeFromPile(player.xNonLands, data.cardId));
+    card.push(removeFromPile(player.xHand, data.cardId));
+    return {
+        card: card[0],
+        player: player
+    };
 }
 
 function removeFromPile(container, cardId){
+    var card = container.filter(function(item) { return item.id == cardId})[0];
     container = container.filter(function(item) { return item.id != cardId});
-    return container.filter(function(item) { return item.id == cardId})[0];
+    return card;
 }
 
-function addToPile(card, data){
-    var player = game.players.filter(function(item) { return item.name == data.player })[0];
-
+function addToPile(cardPlayer, data){
     switch (data.container) {
-        case "#arenaPlayerLands":   player.lands.push(card);     break;
-        case "#arenaOpponentLands": player.xLands.push(card);    break;
-        case "#arenaPlayerCards":   player.nonLands.push(card);  break;
-        case "#arenaOpponentCards": player.xNonLands.push(card); break;
-        case "#containerBottom":    player.hand.push(card);      break;
-        case "#containerTop":       player.xHand.push(card);     break;
-        default:                                                 break;
+        case "#arenaPlayerLands":   cardPlayer.player.lands.push(cardPlayer.card);     break;
+        case "#arenaOpponentLands": cardPlayer.player.xLands.push(cardPlayer.card);    break;
+        case "#arenaPlayerCards":   cardPlayer.player.nonLands.push(cardPlayer.card);  break;
+        case "#arenaOpponentCards": cardPlayer.player.xNonLands.push(cardPlayer.card); break;
+        case "#containerBottom":    cardPlayer.player.hand.push(cardPlayer.card);      break;
+        case "#containerTop":       cardPlayer.player.xHand.push(cardPlayer.card);     break;
+        default:                                                                       break;
     }
+
+    var versusPlayer = game.players.filter(function(item) { return item.name != data.player })[0];
+    game.players = [];
+    game.players.push(versusPlayer);
+    game.players.push(cardPlayer.player);
 }
 
 // function draw(player){
